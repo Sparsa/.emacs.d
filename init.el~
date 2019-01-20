@@ -27,10 +27,7 @@ There are two things you can do about this warning:
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
-(require 'latex-pretty-symbols)
-(require 'magic-latex-buffer)
-(add-hook 'TeX-mode-hook 'magic-latex-buffer)
-(add-hook 'TeX-mode-hook 'flyspell-mode)
+
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
@@ -183,7 +180,7 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (magic-latex-buffer latex-pretty-symbols pdf-tools))))
+ '(package-selected-packages (quote (latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
