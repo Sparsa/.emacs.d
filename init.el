@@ -38,6 +38,7 @@ There are two things you can do about this warning:
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
+;;
 (pdf-tools-install)
 (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
   TeX-source-correlate-start-server t)
@@ -46,18 +47,59 @@ There are two things you can do about this warning:
 (setq TeX-PDF-mode t)
 (setq TeX-source-correlate-method 'synctex)
 (setq TeX-source-correlate-mode t)
-
+(global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
+;;
 (setq reftex-plug-into-AUCTeX t)
- 
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+(setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (magic-latex-buffer latex-pretty-symbols pdf-tools))))
+ '(package-selected-packages
+   (quote
+    (yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+(add-hook 'LaTeX-mode-hook
+      (lambda()
+        (local-set-key [C-tab] 'TeX-complete-symbol)))
+
+;; This is for autocompletion enabling.
+
+;; auto-complete setup, sequence is important
+;; (require 'auto-complete)
+;; (add-to-list 'ac-modes 'latex-mode) ; beware of using 'LaTeX-mode instead
+;; (require 'ac-math) ; package should be installed first 
+;; (defun my-ac-latex-mode () ; add ac-sources for latex
+;;    (setq ac-sources
+;;          (append '(ac-source-math-unicode
+;;            ac-source-math-latex
+;;            ac-source-latex-commands)
+;;                  ac-sources)))
+;; (add-hook 'LaTeX-mode-hook 'my-ac-latex-mode)
+;; (setq ac-math-unicode-in-math-p t)
+;; (ac-flyspell-workaround) ; fixes a known bug of delay due to flyspell (if it is there)
+;; (add-to-list 'ac-modes 'org-mode) ; auto-complete for org-mode (optional)
+;; (require 'auto-complete-config) ; should be after add-to-list 'ac-modes and hooks
+;; (ac-config-default)
+;; (setq ac-auto-start nil)            ; if t starts ac at startup automatically
+;; (setq ac-auto-show-menu t)
+;; (global-auto-complete-mode t) 
+					; predicitve mode
+;; predictive install location
+;;   (add-to-list 'load-path "~/.emacs.d/predictive/")
+;;   ;; dictionary locations
+;;   (add-to-list 'load-path "~/.emacs.d/predictive/latex/")
+;; ;  (add-to-list 'load-path "~/.emacs.d/predictive/texinfo/")
+;;  ; (add-to-list 'load-path "~/.emacs.d/predictive/html/")
+;;   ;; load predictive package
+;;   (require 'predictive)
