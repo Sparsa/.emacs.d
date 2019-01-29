@@ -485,7 +485,7 @@
 	   ((:url . "http://elpa.gnu.org/packages/flymake.html")
 	    (:keywords "c" "languages" "tools"))])
  (fountain-mode .
-		[(2 6 1)
+		[(2 6 2)
 		 ((emacs
 		   (24 5)))
 		 "Major mode for screenwriting in Fountain markup" single
@@ -629,7 +629,7 @@
 		((:url . "https://github.com/clemera/ivy-explorer")
 		 (:keywords "convenience" "files" "matching"))])
  (javaimp .
-	  [(0 6)
+	  [(0 6 1)
 	   nil "Add and reorder Java import statements in Maven projects" tar
 	   ((:keywords "java" "maven" "programming")
 	    (:url . "http://elpa.gnu.org/packages/javaimp.html"))])
@@ -862,7 +862,7 @@
 	  ((:url . "http://elpa.gnu.org/packages/oauth2.html")
 	   (:keywords "comm"))])
  (objed .
-	[(0 2 0)
+	[(0 4 0)
 	 ((emacs
 	   (25))
 	  (cl-lib
