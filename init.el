@@ -33,6 +33,7 @@ There are two things you can do about this warning:
 (load "preview-latex.el" nil t t)
 (require 'latex-pretty-symbols)
 (require 'magic-latex-buffer)
+(require 'auctex-latexmk)
 (add-hook 'TeX-mode-hook 'magic-latex-buffer)
 (add-hook 'TeX-mode-hook 'flyspell-mode)
 (setq TeX-auto-save t)
@@ -60,7 +61,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (use-package auctex-latexmk diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -75,6 +76,29 @@ There are two things you can do about this warning:
 
 
 (global-diff-hl-mode)
+
+(use-package auctex-latexmk
+  :ensure t
+  :init
+  (with-eval-after-load 'tex
+    (auctex-latexmk-setup))
+  :config
+
+  ;; Use Latexmk as the default command.
+  ;; (We have to use a hook instead of `setq-default' because AUCTeX sets this variable on mode activation.)
+  (defun my-tex-set-latexmk-as-default ()
+    (setq TeX-command-default "LatexMk"))
+  (add-hook 'TeX-mode-hook #'my-tex-set-latexmk-as-default)
+
+  ;; Compile to PDF when `TeX-PDF-mode' is active.
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+;; (auctex-latexmk-setup)
+;; ;; (add-hook 'LaTeX-mode-hook
+;; ;;           (lambda ()
+;; ;;             (add-hook 'after-save-hook 'auctex-latexmk nil t)))
+
+;; (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+;; (setq TeX-command-default "LatexMk")
 
 ;; This is for autocompletion enabling.
 
