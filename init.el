@@ -48,6 +48,7 @@ There are two things you can do about this warning:
 (setq TeX-PDF-mode t)
 (setq TeX-source-correlate-method 'synctex)
 (setq TeX-source-correlate-mode t)
+(setq-default TeX-master nil)
 (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
 ;;
 (setq reftex-plug-into-AUCTeX t)
