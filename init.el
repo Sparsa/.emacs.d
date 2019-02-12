@@ -39,6 +39,7 @@ There are two things you can do about this warning:
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
+(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)));'linum-on)
 ;;
 (pdf-tools-install)
 (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
