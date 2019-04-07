@@ -27,15 +27,19 @@ There are two things you can do about this warning:
 					;make sure the following packages are installed
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
-; this will compile and install the package. But I think every thing is inside the directory.
+					; this will compile and install the package. But I think every thing is inside the directory.
+(blink-cursor-mode -1)
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
+(load-theme 'nimbus t)
 (require 'latex-pretty-symbols)
 (require 'magic-latex-buffer)
+(require 'company-auctex)
 (require 'auctex-latexmk)
 (add-hook 'TeX-mode-hook 'magic-latex-buffer)
 (add-hook 'TeX-mode-hook 'flyspell-mode)
+(company-auctex-init)
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
@@ -46,7 +50,7 @@ There are two things you can do about this warning:
   TeX-source-correlate-start-server t)
 (add-hook 'TeX-after-compilation-finished-functions
           #'TeX-revert-document-buffer)
-(setq TeX-PDF-mode t)
+;(setq TeX-PDF-mode t)
 (setq TeX-source-correlate-method 'synctex)
 (setq TeX-source-correlate-mode t)
 (setq-default TeX-master nil)
@@ -63,7 +67,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (use-package auctex-latexmk diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (nimbus-theme company-auctex use-package auctex-latexmk diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
