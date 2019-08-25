@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "nimbus-theme" "20190815.1740" "An awesome dark theme." '((emacs "24")) :commit "d2e627024ab7ce608b5203d4084c6a1588621545" :keywords '("faces") :authors '(("Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") ("See README.md for full list of contributors.")) :maintainer '("Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") :url "https://github.com/m-cat/nimbus-theme")

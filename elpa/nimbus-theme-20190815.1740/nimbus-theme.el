@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190724.740
+;; Package-Version: 20190815.1740
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -70,6 +70,7 @@
        (red            "#d65946")
        (dark-red       "#ad3632")
 
+       (lightest-gray  "#a0a0a0")
        (lighter-gray   "#959595")
        (light-gray     "#858585")
        (gray           "#757575")
@@ -81,16 +82,17 @@
        (white          "white")
        (black          "black")
 
-       (green-bg       "#11472b")
-       (teal-bg        "#114747")
-       (dark-teal-bg   "#112b2b")
-       (gray-bg        "#2b2b2b")
-       (blue-bg        "#112b47")
+       (green-bg        "#11472b")
+       (teal-bg         "#114747")
+       (dark-teal-bg    "#112b2b")
+       (gray-bg         "#2b2b2b")
+       (blue-bg         "#112b47")
        (light-purple-bg "#2b2b47")
-       (purple-bg      "#2b1147")
-       (red-bg         "#47112b")
+       (purple-bg       "#2b1147")
+       (red-bg          "#47112b")
 
        (nimbus-err     "red")
+       (nimbus-success light-green)
        (nimbus-warn    "#f57e00")
 
        (bg             "gray10")
@@ -109,6 +111,7 @@
        (file           blue)
        (hash           dark-tan)
        (heading        purple)
+       (hl-line        blue-bg)
        (ignore         blue-gray)
        (indent         darker-gray)
        (key            blue)
@@ -116,7 +119,7 @@
        (line-current   dark-green)
        (name           dark-green)
        (number         orange)
-       (selection      blue-bg)
+       (selection      purple-bg)
        (separator      orange)
        (special        blue-gray)
        (summary        red)
@@ -136,15 +139,15 @@
        (diff-markers    bg)
        (diff-markers-bg light-gray)
 
-       (rainbow-1      purple)
-       (rainbow-2      green)
-       (rainbow-3      orange)
-       (rainbow-4      light-blue)
-       (rainbow-5      yellow)
-       (rainbow-6      green)
-       (rainbow-7      orange)
-       (rainbow-8      light-blue)
-       (rainbow-9      yellow)
+       (rainbow-1       purple)
+       (rainbow-2       green)
+       (rainbow-3       orange)
+       (rainbow-4       light-blue)
+       (rainbow-5       yellow)
+       (rainbow-6       green)
+       (rainbow-7       orange)
+       (rainbow-8       light-blue)
+       (rainbow-9       yellow)
        )
 
   ;; Set faces.
@@ -162,7 +165,7 @@
    `(tooltip ((t (:foreground ,bg :background ,fg))))
 
    `(error ((t (:foreground ,nimbus-err :bold t :underline nil :slant normal))))
-   `(success ((t (:foreground ,light-green :bold t :underline nil :slant normal))))
+   `(success ((t (:foreground ,nimbus-success :bold t :underline nil :slant normal))))
    `(warning ((t (:foreground ,nimbus-warn :bold t :underline nil :slant normal))))
 
    ;;; Font lock
@@ -275,17 +278,18 @@
    `(comint-highlight-prompt ((t (:foreground ,green))))
 
    ;; company
-   `(company-preview-common ((t (:inherit font-lock-comment-face))))
+   `(company-preview ((t (:background ,selection))))
+   `(company-preview-common ((t (:foreground ,lightest-gray))))
    `(company-scrollbar-bg ((t (:background ,dark-teal-bg))))
    `(company-scrollbar-fg ((t (:background ,teal-bg))))
    `(company-template-field ((t (:inherit highlight))))
-   `(company-tooltip ((t (:foreground ,fg :background ,darker-gray))))
+   `(company-tooltip ((t (:foreground ,fg :background ,light-purple-bg))))
    `(company-tooltip-annotation ((t (:inherit font-lock-type-face))))
    `(company-tooltip-annotation-selection ((t (:inherit font-lock-type-face))))
    `(company-tooltip-common ((t (:inherit company-tooltip :foreground ,current))))
-   `(company-tooltip-common-selection ((t (:foreground ,fg :background ,blue-bg))))
+   `(company-tooltip-common-selection ((t (:foreground ,fg :background ,selection))))
    `(company-tooltip-mouse ((t (:inherit company-tooltip-selection))))
-   `(company-tooltip-selection ((t (:foreground ,fg :background ,blue-bg))))
+   `(company-tooltip-selection ((t (:foreground ,fg :background ,selection))))
 
    ;; compilation
    `(compilation-info ((t (:inherit success))))
@@ -324,6 +328,7 @@
 
    ;; deadgrep
    `(deadgrep-meta-face ((t (:foreground ,line))))
+   `(deadgrep-filename-face ((t (:foreground ,file))))
 
    ;; debbugs
    `(debbugs-gnu-done ((t (:foreground ,gray))))
@@ -371,7 +376,7 @@
    `(diredfl-dir-name ((t (:inherit dired-directory))))
    `(diredfl-executable-tag ((t (:foreground ,executable))))
    `(diredfl-flag-mark ((t (:inherit dired-flagged))))
-   `(diredfl-flag-mark-line ((t (:background ,purple-bg))))
+   `(diredfl-flag-mark-line ((t (:background ,selection))))
    `(diredfl-file-name ((t (:foreground ,file))))
    `(diredfl-file-suffix ((t (:foreground ,light-gray))))
    `(diredfl-ignored-file-name ((t (:foreground ,ignore))))
@@ -398,7 +403,7 @@
    `(diredp-executable-tag ((t (:foreground ,executable))))
    `(diredp-file-name ((t (:foreground ,file))))
    `(diredp-flag-mark ((t (:inherit dired-flagged))))
-   `(diredp-flag-mark-line ((t (:background ,purple-bg))))
+   `(diredp-flag-mark-line ((t (:background ,selection))))
    `(diredp-file-suffix ((t (:foreground ,light-gray))))
    `(diredp-ignored-file-name ((t (:foreground ,ignore))))
    `(diredp-mode-line-flagged ((t (:inherit dired-flagged))))
@@ -471,7 +476,7 @@
    `(evil-search-highlight-persist-highlight-face ((t (:inherit match))))
 
    ;; flycheck
-   `(flycheck-info ((t (:underline (:color ,light-green :style wave)))))
+   `(flycheck-info ((t (:underline (:color ,nimbus-success :style wave)))))
    `(flycheck-warning ((t (:underline (:color ,nimbus-warn :style wave)))))
    `(flycheck-error ((t (:underline (:color ,nimbus-err :style wave)))))
    `(flycheck-fringe-info ((t (:inherit success :bold nil))))
@@ -479,6 +484,10 @@
    `(flycheck-fringe-error ((t (:inherit error :bold nil))))
    `(flycheck-error-list-info ((t (:foreground ,green))))
    `(flycheck-error-list-checker-name ((t (:foreground ,yellow))))
+
+   `(flymake-note ((t (:underline (:color ,nimbus-success :style wave)))))
+   `(flymake-warning ((t (:underline (:color ,nimbus-warn :style wave)))))
+   `(flymake-error ((t (:underline (:color ,nimbus-err :style wave)))))
 
    ;; forge
    `(forge-post-author ((t (:foreground ,name))))
@@ -614,7 +623,7 @@
    `(helm-match ((t (:inherit highlight :foreground ,current))))
    `(helm-moccur-buffer ((t (:inherit compilation-info))))
    `(helm-prefarg ((t (:foreground ,green :bold t))))
-   `(helm-selection ((t (:background ,purple-bg))))
+   `(helm-selection ((t (:background ,selection))))
    `(helm-source-header ((t (:background ,darkerer-gray))))
    `(helm-visible-mark ((t (:inherit region))))
 
@@ -643,7 +652,7 @@
    `(highlight-quoted-symbol ((t (:foreground ,purple))))
 
    ;; hl-line
-   `(hl-line ((t (:background ,selection))))
+   `(hl-line ((t (:background ,hl-line))))
 
    ;; hl-todo
    `(hl-todo ((t (:foreground ,pink :bold nil :slant italic))))
@@ -715,6 +724,17 @@
    `(line-number ((t (:inherit default :foreground ,line))))
    `(line-number-current-line ((t (:inherit default :foreground ,line-current))))
 
+   ;; lsp-ui
+   ;; This face seems to break once I set it.
+   `(lsp-ui-doc-background ((t (:background ,light-purple-bg))))
+   `(lsp-ui-doc-header ((t (:foreground ,heading))))
+   `(lsp-ui-peek-filename ((t (:foreground ,file))))
+   `(lsp-ui-peek-footer ((t (:inherit lsp-ui-peek-header))))
+   `(lsp-ui-peek-header ((t (:foreground ,diff-markers :background ,diff-markers-bg))))
+   `(lsp-ui-peek-line-number ((t (:foreground ,line))))
+   `(lsp-ui-peek-highlight ((t (:inherit highlight))))
+   `(lsp-ui-peek-selection ((t (:background ,selection))))
+
    ;; magit
    `(magit-section-heading ((t (:foreground ,heading))))
    `(magit-section-heading-selection ((t (:foreground ,red))))
@@ -731,9 +751,9 @@
    `(magit-diffstat-removed ((t (:foreground ,diff-removed))))
 
    `(magit-diff-hunk-heading ((t (:inherit default :background ,dark-teal-bg))))
-   `(magit-section-highlight ((t (:background ,selection))))
+   `(magit-section-highlight ((t (:background ,hl-line))))
    `(magit-diff-context-highlight ((t (:background ,gray-bg))))
-   `(magit-diff-file-heading-highlight ((t (:background ,selection :slant normal :underline nil))))
+   `(magit-diff-file-heading-highlight ((t (:background ,hl-line :slant normal :underline nil))))
    `(magit-diff-hunk-heading-highlight ((t (:background ,teal-bg))))
    `(magit-diff-added-highlight ((t (:foreground ,diff-added :background ,darkest-gray))))
    `(magit-diff-removed-highlight ((t (:foreground ,diff-removed :background ,darkest-gray))))
@@ -1108,7 +1128,7 @@
    `(w3m-underline ((t (:foreground ,green :underline t))))
 
    ;; yasnippet
-   `(yas-field-highlight-face ((t (:inherit highlight))))
+   `(yas-field-highlight-face ((t (:background ,selection))))
 
    ) ;; end of custom-theme-set-faces
 
