@@ -28,39 +28,57 @@ There are two things you can do about this warning:
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
 					; this will compile and install the package. But I think every thing is inside the directory.
-(blink-cursor-mode -1)
 (setq inhibit-startup-screen t); this will prevent the start up menu
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
-(load-theme 'nimbus t)
-(require 'latex-pretty-symbols)
+(blink-cursor-mode -1) ;this will stop the cursor from blinking
+(global-diff-hl-mode); enable diff highlight for current changes
+(set-default-font "Monaco 12") ;this will set the default font to monaco and size 12
+(load-theme 'nimbus t) ;enables the nimbus theme 
+(load "auctex.el" nil t t); it loads auctex 
+(load "preview-latex.el" nil t t) ; it enables latex preview
+(require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
-(require 'company-auctex)
+(require 'company-auctex) ; this requires company latex for autofilling
+(company-auctex-init); start company latex
+(pdf-tools-install); pdf-tools install
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
-(add-hook 'TeX-mode-hook 'flyspell-mode)
-					;(add-hook 'Tex-mode-hook (lambda() (set-default-font "Monaco 14")))
-(set-default-font "Monaco 12")
-(company-auctex-init)
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq TeX-save-query nil)
-(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)));'linum-on)
+(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
+
+(add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
+
+	  (lambda()
+	    (turn-on-reftex) ;enable reftex
+	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
+	    (setq TeX-parse-self t) ; enable autoparsing
+	    (setq TeX-save-query nil) ; 
+	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		  TeX-source-correlate-start-server t) ;use pdf-tools for default document view
+	    (setq TeX-source-correlate-method 'synctex) ; enable synctex
+ 
+	    (setq TeX-source-correlate-mode t) ; enable text-source-correlate using synctex
+	    (setq-default TeX-master nil) 
+	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search) ;sync from text to pdf
+	    (add-hook 'TeX-after-compilation-finished-functions
+		      #'TeX-revert-document-buffer) ; reload pdf buffer
+	    (setq reftex-plug-into-AUCTeX t) ; enable auctex
+	    (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	    (local-set-key [C-tab] 'TeX-complete-symbol) ;tex complete symbol
+	    (flyspell-mode) ; flyspell mode enable
+	    (turn-on-auto-fill) ; autofill enable for line breaks
+
+	    )
+
+
+	  )
+
 ;;
-(pdf-tools-install)
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-  TeX-source-correlate-start-server t)
-(add-hook 'TeX-after-compilation-finished-functions
-          #'TeX-revert-document-buffer)
+(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
+
 ;(setq TeX-PDF-mode t)
-(setq TeX-source-correlate-method 'synctex)
-(setq TeX-source-correlate-mode t)
-(setq-default TeX-master nil)
-(global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
 ;;
-(setq reftex-plug-into-AUCTeX t)
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
-(setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -78,68 +96,4 @@ There are two things you can do about this warning:
  )
 
 
-(add-hook 'LaTeX-mode-hook
-      (lambda()
-        (local-set-key [C-tab] 'TeX-complete-symbol)))
-(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 
-(global-diff-hl-mode)
-
-
-
- ;; (use-package auctex-latexmk
- ;;   :ensure t
- ;;   :init
- ;;   (with-eval-after-load 'tex
- ;;     (auctex-latexmk-setup))
- ;;   :config
-
- ;;   ;; Use Latexmk as the default command.
- ;;   ;; (We have to use a hook instead of `setq-default' because AUCTeX sets this variable on mode activation.)
- ;;   (defun my-tex-set-latexmk-as-default ()
- ;;     (setq TeX-command-default "LatexMk"))
- ;;   (add-hook 'TeX-mode-hook #'my-tex-set-latexmk-as-default)
-
- ;;   ;; Compile to PDF when `TeX-PDF-mode' is active.
- ;;   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
-
-
-
-;; (auctex-latexmk-setup)
-;; ;; (add-hook 'LaTeX-mode-hook
-;; ;;           (lambda ()
-;; ;;             (add-hook 'after-save-hook 'auctex-latexmk nil t)))
-
-;; (setq auctex-latexmk-inherit-TeX-PDF-mode t)
-;; (setq TeX-command-default "LatexMk")
-
-;; This is for autocompletion enabling.
-
-;; auto-complete setup, sequence is important
-;; (require 'auto-complete)
-;; (add-to-list 'ac-modes 'latex-mode) ; beware of using 'LaTeX-mode instead
-;; (require 'ac-math) ; package should be installed first 
-;; (defun my-ac-latex-mode () ; add ac-sources for latex
-;;    (setq ac-sources
-;;          (append '(ac-source-math-unicode
-;;            ac-source-math-latex
-;;            ac-source-latex-commands)
-;;                  ac-sources)))
-;; (add-hook 'LaTeX-mode-hook 'my-ac-latex-mode)
-;; (setq ac-math-unicode-in-math-p t)
-;; (ac-flyspell-workaround) ; fixes a known bug of delay due to flyspell (if it is there)
-;; (add-to-list 'ac-modes 'org-mode) ; auto-complete for org-mode (optional)
-;; (require 'auto-complete-config) ; should be after add-to-list 'ac-modes and hooks
-;; (ac-config-default)
-;; (setq ac-auto-start nil)            ; if t starts ac at startup automatically
-;; (setq ac-auto-show-menu t)
-;; (global-auto-complete-mode t) 
-					; predicitve mode
-;; predictive install location
-;;   (add-to-list 'load-path "~/.emacs.d/predictive/")
-;;   ;; dictionary locations
-;;   (add-to-list 'load-path "~/.emacs.d/predictive/latex/")
-;; ;  (add-to-list 'load-path "~/.emacs.d/predictive/texinfo/")
-;;  ; (add-to-list 'load-path "~/.emacs.d/predictive/html/")
-;;   ;; load predictive package
-;;   (require 'predictive)
