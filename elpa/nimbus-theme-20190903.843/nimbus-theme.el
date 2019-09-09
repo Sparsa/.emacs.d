@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190815.1740
+;; Package-Version: 20190903.843
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -908,7 +908,7 @@
    `(org-recur ((t (:foreground ,dark-tan))))
 
    ;; org-super-agenda
-   `(org-super-agenda-header ((t (:foreground ,lighter-gray))))
+   `(org-super-agenda-header ((t (:inherit font-lock-comment-face))))
 
    ;; package
    `(package-name ((t (:inherit link))))

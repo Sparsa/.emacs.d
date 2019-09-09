@@ -38,16 +38,22 @@ There are two things you can do about this warning:
 (require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
 (require 'company-auctex) ; this requires company latex for autofilling
+(require 'flymake)
 (company-auctex-init); start company latex
 (pdf-tools-install); pdf-tools install
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
 (add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
+(defun flymake-get-tex-args (file-name)
+(list "pdflatex"
+(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
 
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 
 	  (lambda()
 	    (turn-on-reftex) ;enable reftex
+	    (flymake-mode); flymake mode
+	    (rainbow-delimiters-mode)
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
 	    (setq TeX-parse-self t) ; enable autoparsing
 	    (setq TeX-save-query nil) ; 
@@ -63,13 +69,24 @@ There are two things you can do about this warning:
 	    (setq reftex-plug-into-AUCTeX t) ; enable auctex
 	    (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 	    (local-set-key [C-tab] 'TeX-complete-symbol) ;tex complete symbol
+	    ; could be ispell as well, depending on your preferences
+	    (setq ispell-program-name "aspell") 
+; this can obviously be set to any language your spell-checking program supports
+	    (setq ispell-dictionary "english") 
 	    (flyspell-mode) ; flyspell mode enable
+	    (flyspell-buffer); flyspell buffer
 	    (turn-on-auto-fill) ; autofill enable for line breaks
-
+	    (setq-local company-backends
+              (append '((company-math-symbols-latex company-latex-commands))
+                      company-backends))
 	    )
 
 
 	  )
+
+
+
+
 
 ;;
 (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
@@ -87,7 +104,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
