@@ -30,16 +30,24 @@ There are two things you can do about this warning:
 					; this will compile and install the package. But I think every thing is inside the directory.
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
+;; (require 'doom-modeline); require doom-modeline
+;; (doom-modeline-mode 1); enable the doom-modeline
 (global-diff-hl-mode); enable diff highlight for current changes
 (set-default-font "Monaco 12") ;this will set the default font to monaco and size 12
-(load-theme 'nimbus t) ;enables the nimbus theme 
+;(load-theme 'nimbus t) ;enables the nimbus theme
+(load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
 (require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
 (require 'company-auctex) ; this requires company latex for autofilling
 (require 'flymake)
-(company-auctex-init); start company latex
+(require 'auto-package-update)
+(auto-package-update-maybe) ; to enable auto update of melpa packages
+(setq auto-package-update-interval 14) ; set the update interval to 14 days
+(setq auto-package-update-prompt-before-update t) ; ask before going to update
+(setq auto-package-update-delete-old-versions t) ; delete old versions after updating
+(setq auto-package-update-hide-results t) ; hide the update results after the update
 (pdf-tools-install); pdf-tools install
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
@@ -51,6 +59,7 @@ There are two things you can do about this warning:
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 
 	  (lambda()
+	    (company-auctex-init); start company latex
 	    (turn-on-reftex) ;enable reftex
 	    (flymake-mode); flymake mode
 	    (rainbow-delimiters-mode)
@@ -104,7 +113,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
