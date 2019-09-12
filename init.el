@@ -23,11 +23,44 @@ There are two things you can do about this warning:
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 ;(package-initialize)
-					;(server-start)
+(server-start)
 					;make sure the following packages are installed
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
 					; this will compile and install the package. But I think every thing is inside the directory.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+					;======Autoinstall Packages If Not Installed=======
+(defun print-elements-of-list (list)
+       "Print each element of LIST on a line of its own."
+       (while list
+         (print (car list))
+         (setq list (cdr list))))
+     
+;(print-elements-of-list package-selected-packages)
+
+(dolist (p package-selected-packages)
+  (when (not (package-installed-p p))
+    (package-refresh-contents)
+    (package-install p)))
+
+
+					;======Own Configuration======
+
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
 ;; (require 'doom-modeline); require doom-modeline
@@ -106,20 +139,6 @@ There are two things you can do about this warning:
 ;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 
 
