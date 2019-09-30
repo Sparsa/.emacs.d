@@ -35,7 +35,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -60,6 +60,8 @@ There are two things you can do about this warning:
 
 
 					;======Own Configuration======
+					;===== Magit settings
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
@@ -84,7 +86,7 @@ There are two things you can do about this warning:
 (pdf-tools-install); pdf-tools install
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
-(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
+;(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
 (defun flymake-get-tex-args (file-name)
 (list "pdflatex"
 (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
