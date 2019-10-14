@@ -45,6 +45,8 @@ There are two things you can do about this warning:
 
 
 					;======Autoinstall Packages If Not Installed=======
+
+
 (defun print-elements-of-list (list)
        "Print each element of LIST on a line of its own."
        (while list
@@ -60,6 +62,9 @@ There are two things you can do about this warning:
 
 
 					;======Own Configuration======
+;; (require 'auto-save-buffers-enhanced) ;use autosave buffers
+;; (run-with-idle-timer 2 t 'auto-save-buffers-enhanced) ; idle time is 2s
+;; (global-set-key [f8] 'auto-save-buffers-toggle); toggle is f8
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
 
