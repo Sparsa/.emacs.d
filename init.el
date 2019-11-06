@@ -22,8 +22,9 @@ There are two things you can do about this warning:
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-;(package-initialize)
-(server-start)
+					;(package-initialize)
+(load "server")
+(unless (server-running-p) (server-start))
 					;make sure the following packages are installed
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
@@ -147,5 +148,17 @@ There are two things you can do about this warning:
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+
+
+;; ORG mode settings start from here
+
+
+
+(add-hook 'org-mode-hook
+	  (global-set-key (kbd "C-c l") 'org-store-link)
+	  (global-set-key (kbd "C-c a") 'org-agenda)
+	  (global-set-key (kbd "C-c c") 'org-capture)
+	  
+	  )
 
 
