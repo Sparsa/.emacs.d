@@ -36,7 +36,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -68,6 +68,9 @@ There are two things you can do about this warning:
 ;; (global-set-key [f8] 'auto-save-buffers-toggle); toggle is f8
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
+					;======= IDO
+(require 'ido)
+(ido-mode t)
 
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
@@ -139,6 +142,7 @@ There are two things you can do about this warning:
 
 
 ;;
+(global-linum-mode t)
 (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
 
 ;(setq TeX-PDF-mode t)
@@ -148,7 +152,11 @@ There are two things you can do about this warning:
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+;; set maximum indentation for description lists
+(setq org-list-description-max-indent 5)
 
+;; prevent demoting heading also shifting text inside sections
+(setq org-adapt-indentation nil)
 
 ;; ORG mode settings start from here
 
