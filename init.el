@@ -36,7 +36,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+    (graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -77,15 +77,36 @@ There are two things you can do about this warning:
 ;; (require 'doom-modeline); require doom-modeline
 ;; (doom-modeline-mode 1); enable the doom-modeline
 (global-diff-hl-mode); enable diff highlight for current changes
-(set-default-font "Monaco 12") ;this will set the default font to monaco and size 12
+(set-frame-font "Monaco 12") ;this will set the default font to monaco and size 12
 ;(load-theme 'nimbus t) ;enables the nimbus theme
 (load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
 (require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
-(require 'company-auctex) ; this requires company latex for autofilling
-(require 'flymake)
+;(require 'company-auctex) ; this requires company latex for autofilling
+
+
+					;(require 'flymake)
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; if you want to change prefix for lsp-mode keybindings.
+(require 'company-lsp)
+(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
+;; (require 'company-lsp)
+;; (push 'company-lsp company-backends)
+
+;; "texlab" must be located at a directory contained in `exec-path'.
+;; If you want to put "texlab" somewhere else,
+;; you can specify the path to "texlab" as follows:
+;; (setq lsp-latex-texlab-executable "/path/to/texlab")
+
+;; (with-eval-after-load "tex-mode"
+;;  (add-hook 'tex-mode-hook 'lsp)
+;;  (add-hook 'latex-mode-hook 'lsp))
+
 (require 'auto-package-update)
 (auto-package-update-maybe) ; to enable auto update of melpa packages
 (setq auto-package-update-interval 14) ; set the update interval to 14 days
@@ -96,16 +117,16 @@ There are two things you can do about this warning:
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
 ;(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
-(defun flymake-get-tex-args (file-name)
-(list "pdflatex"
-(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+;; (defun flymake-get-tex-args (file-name)
+;; (list "pdflatex"
+;; (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
 
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 
 	  (lambda()
-	    (company-auctex-init); start company latex
+	    ;(company-auctex-init); start company latex
 	    (turn-on-reftex) ;enable reftex
-	    (flymake-mode); flymake mode
+	    ;(flymake-mode); flymake mode
 	    (rainbow-delimiters-mode)
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
 	    (setq TeX-parse-self t) ; enable autoparsing
@@ -129,9 +150,9 @@ There are two things you can do about this warning:
 	    (flyspell-mode) ; flyspell mode enable
 	    (flyspell-buffer); flyspell buffer
 	    (turn-on-auto-fill) ; autofill enable for line breaks
-	    (setq-local company-backends
-              (append '((company-math-symbols-latex company-latex-commands))
-                      company-backends))
+	    ;; (setq-local company-backends
+            ;;   (append '((company-math-symbols-latex company-latex-commands))
+            ;;           company-backends))
 	    )
 
 
@@ -168,5 +189,12 @@ There are two things you can do about this warning:
 	  (global-set-key (kbd "C-c c") 'org-capture)
 	  
 	  )
+
+;;;;; rust mode hook
+(require 'rust-mode)
+(add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
+(setq rust-format-on-save t)
+(define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
 
 
