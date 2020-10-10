@@ -35,8 +35,8 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))))
+   '(paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+ '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -46,7 +46,18 @@ There are two things you can do about this warning:
 
 
 					;======Autoinstall Packages If Not Installed=======
+;;install quelpa
+(unless (package-installed-p 'quelpa)
+    (with-temp-buffer
+      (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+      (eval-buffer)
+      (quelpa-self-upgrade)))
 
+(require 'quelpa)
+(quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
+;; (pdf-continuous-scroll-mode :location (recipe
+;;                                        :fetcher github
+;;                                        :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
 
 (defun print-elements-of-list (list)
        "Print each element of LIST on a line of its own."
@@ -69,7 +80,7 @@ There are two things you can do about this warning:
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
 					;======= IDO
-(require 'ido)
+(paradox-require 'ido)
 (ido-mode t)
 
 (setq inhibit-startup-screen t); this will prevent the start up menu
@@ -82,7 +93,7 @@ There are two things you can do about this warning:
 (load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
-(require 'latex-pretty-symbols) ;enables lates pretty symbols
+(paradox-require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
 ;(require 'company-auctex) ; this requires company latex for autofilling
 
@@ -93,7 +104,7 @@ There are two things you can do about this warning:
   :init (global-flycheck-mode))
 
 ;; if you want to change prefix for lsp-mode keybindings.
-(require 'company-lsp)
+(paradox-require 'company-lsp)
 (add-to-list 'company-lsp-filter-candidates '(digestif . nil))
 ;; (require 'company-lsp)
 ;; (push 'company-lsp company-backends)
@@ -107,7 +118,7 @@ There are two things you can do about this warning:
 ;;  (add-hook 'tex-mode-hook 'lsp)
 ;;  (add-hook 'latex-mode-hook 'lsp))
 
-(require 'auto-package-update)
+(paradox-require 'auto-package-update)
 (auto-package-update-maybe) ; to enable auto update of melpa packages
 (setq auto-package-update-interval 14) ; set the update interval to 14 days
 (setq auto-package-update-prompt-before-update t) ; ask before going to update
@@ -165,7 +176,12 @@ There are two things you can do about this warning:
 ;;
 (global-linum-mode t)
 (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
+;; TESTING THE CONTINUOUS-SCROLL-MODE
 
+(with-eval-after-load 'pdf-view
+  (paradox-require 'pdf-continuous-scroll-mode))
+(add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
+;;(setq  pdf-cs-reverse-scrolling t)
 ;(setq TeX-PDF-mode t)
 ;;
 
@@ -191,10 +207,12 @@ There are two things you can do about this warning:
 	  )
 
 ;;;;; rust mode hook
-(require 'rust-mode)
+(paradox-require 'rust-mode)
 (add-hook 'rust-mode-hook
           (lambda () (setq indent-tabs-mode nil)))
 (setq rust-format-on-save t)
 (define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
 
-
+;; Paradox
+(paradox-require 'paradox)
+(paradox-enable)
