@@ -23,8 +23,8 @@ There are two things you can do about this warning:
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 					;(package-initialize)
-(load "server")
-(unless (server-running-p) (server-start))
+;; (load "server")
+;; (unless (server-running-p) (server-start))
 					;make sure the following packages are installed
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
