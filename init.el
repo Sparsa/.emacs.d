@@ -82,7 +82,8 @@ There are two things you can do about this warning:
 					;======= IDO
 (paradox-require 'ido)
 (ido-mode t)
-
+(global-auto-revert-mode t)
+;;(auto-revert-use-notify nil)
 (setq inhibit-startup-screen t); this will prevent the start up menu
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
 ;; (require 'doom-modeline); require doom-modeline
@@ -119,11 +120,12 @@ There are two things you can do about this warning:
 ;;  (add-hook 'latex-mode-hook 'lsp))
 
 (paradox-require 'auto-package-update)
-(auto-package-update-maybe) ; to enable auto update of melpa packages
+ ; to enable auto update of melpa packages
 (setq auto-package-update-interval 14) ; set the update interval to 14 days
 (setq auto-package-update-prompt-before-update t) ; ask before going to update
 (setq auto-package-update-delete-old-versions t) ; delete old versions after updating
 (setq auto-package-update-hide-results t) ; hide the update results after the update
+(auto-package-update-maybe)
 (pdf-tools-install); pdf-tools install
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
