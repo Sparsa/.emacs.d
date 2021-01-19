@@ -35,7 +35,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -65,7 +65,7 @@ There are two things you can do about this warning:
          (print (car list))
          (setq list (cdr list))))
      
-;(print-elements-of-list package-selected-packages)
+;;(print-elements-of-list package-selected-packages)
 
 (dolist (p package-selected-packages)
   (when (not (package-installed-p p))
@@ -139,6 +139,7 @@ There are two things you can do about this warning:
 	  (lambda()
 	    ;(company-auctex-init); start company latex
 	    (turn-on-reftex) ;enable reftex
+	    (turn-on-cdlatex)
 	    ;(flymake-mode); flymake mode
 	    (rainbow-delimiters-mode)
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
@@ -146,9 +147,18 @@ There are two things you can do about this warning:
 	    (setq TeX-save-query nil) ; 
 	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
 		  TeX-source-correlate-start-server t) ;use pdf-tools for default document view
+	    ;; (add-to-list 'LaTeX-indent-environment-list "tikzpicture")
+	    ;; (print-elemenets-of-list LaTeX-indent-environment-list)
+	    ;; (add-to-list 'LaTeX-indent-environment-list "scope")
+	    ;; (add-to-list 'LaTeX-indent-environment-list '("scope"))
+	    ;; (add-to-list 'LaTeX-indent-environment-list '("figure"))
+	    ;; (add-to-list 'LaTeX-indent-environment-list '("tikzpicture" current-indentation))
+	    ;; (print-elemenets-of-list LaTeX-indent-environment-list)
+	    
 	    (setq TeX-source-correlate-method 'synctex) ; enable synctex
  
 	    (setq TeX-source-correlate-mode t) ; enable text-source-correlate using synctex
+	    (TeX-fold-mode 1); enableing tex fold mode for better readability.
 	    (setq-default TeX-master nil) 
 	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search) ;sync from text to pdf
 	    (add-hook 'TeX-after-compilation-finished-functions
