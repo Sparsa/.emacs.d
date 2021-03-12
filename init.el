@@ -35,7 +35,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -55,6 +55,7 @@ There are two things you can do about this warning:
 
 (require 'quelpa)
 (quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
+(setq quelpa-upgrade-interval 7)
 ;; (pdf-continuous-scroll-mode :location (recipe
 ;;                                        :fetcher github
 ;;                                        :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
@@ -94,11 +95,11 @@ There are two things you can do about this warning:
 (load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
-(paradox-require 'latex-pretty-symbols) ;enables lates pretty symbols
+;;(paradox-require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
 ;(require 'company-auctex) ; this requires company latex for autofilling
 
-
+(require 'ox-reveal)
 					;(require 'flymake)
 (use-package flycheck
   :ensure t
@@ -147,6 +148,7 @@ There are two things you can do about this warning:
 	    (setq TeX-save-query nil) ; 
 	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
 		  TeX-source-correlate-start-server t) ;use pdf-tools for default document view
+	    (setq predictive-latex-electric-environments 1)
 	    ;; (add-to-list 'LaTeX-indent-environment-list "tikzpicture")
 	    ;; (print-elemenets-of-list LaTeX-indent-environment-list)
 	    ;; (add-to-list 'LaTeX-indent-environment-list "scope")
@@ -159,6 +161,7 @@ There are two things you can do about this warning:
  
 	    (setq TeX-source-correlate-mode t) ; enable text-source-correlate using synctex
 	    (TeX-fold-mode 1); enableing tex fold mode for better readability.
+;;	    (TeX-fold-buffer 1)
 	    (setq-default TeX-master nil) 
 	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search) ;sync from text to pdf
 	    (add-hook 'TeX-after-compilation-finished-functions
