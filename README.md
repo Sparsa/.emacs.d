@@ -43,7 +43,15 @@ Now enjoy continuous pdf scrolling experience on Pdf-tools (pdf-view) thanks to 
 	in the \LaTeX document
 ### Flymake
 	This package will check syntax errors on the fly
-
+### Company
+	This package will show possible completion of commands math
+	symbols, citations or labels. 
+	For example, if you write \ref{abc, then it will give possible
+	completion of abc from the bibliographic entry.
+	Similarly in math mode it will try to complete \alpha when you
+	write \alph, it works even for the user defined formulas.
+	
+	
 Some other interesting features of this configuration is:
 	* It check for updates of the packages every 14 days
 	* It asks for your permission before updating the packages
