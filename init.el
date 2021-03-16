@@ -1,4 +1,4 @@
-;;;
+;;; Package -- summary
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -23,7 +23,9 @@ There are two things you can do about this warning:
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-					;(package-initialize)
+;(package-initialize)
+;;; Commentary:
+	;; Start server only when there is not one already
 (require 'server)
 (unless (server-running-p)
   (server-start))
@@ -37,7 +39,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -45,7 +47,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
+;;; Code:
 
 					;======Autoinstall Packages If Not Installed=======
 ;;install quelpa
@@ -58,9 +60,7 @@ There are two things you can do about this warning:
 (require 'quelpa)
 (quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
 (setq quelpa-upgrade-interval 7)
-;; (pdf-continuous-scroll-mode :location (recipe
-;;                                        :fetcher github
-;;                                        :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+
 
 (defun print-elements-of-list (list)
        "Print each element of LIST on a line of its own."
@@ -76,24 +76,31 @@ There are two things you can do about this warning:
     (package-install p)))
 
 
-					;======Own Configuration======
-;; (require 'auto-save-buffers-enhanced) ;use autosave buffers
-;; (run-with-idle-timer 2 t 'auto-save-buffers-enhanced) ; idle time is 2s
-;; (global-set-key [f8] 'auto-save-buffers-toggle); toggle is f8
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key (kbd "TAB") 'company-complete-common)				;======= IDO
+;====== Comapany Settings
+(global-set-key (kbd "TAB") 'company-complete-common)
+					;======= IDO Settings
 (paradox-require 'ido)
 (ido-mode t)
+;===== Automatically load any changes in the disk
 (global-auto-revert-mode t)
-;;(auto-revert-use-notify nil)
+;===== Stop the startup screen					;
 (setq inhibit-startup-screen t); this will prevent the start up menu
+;===== Stop  cursor blinking
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
-;; (require 'doom-modeline); require doom-modeline
-;; (doom-modeline-mode 1); enable the doom-modeline
+;===== Doom-modeline
+(require 'doom-modeline); require doom-modeline
+(doom-modeline-mode 1); enable the doom-modeline
+(setq doom-modeline-height 15)
+;; How wide the mode-line bar should be. It's only respected in GUI.
+(setq doom-modeline-bar-width 3)
+;; The limit of the window width.
+;; If `window-width' is smaller than the limit, some information won't be displayed.
+;(setq doom-modeline-window-width-limit fill-column)
+;===== enable global diff mode, wrt 
 (global-diff-hl-mode); enable diff highlight for current changes
 (set-frame-font "Monaco 12") ;this will set the default font to monaco and size 12
-;(load-theme 'nimbus t) ;enables the nimbus theme
 (load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
@@ -106,20 +113,7 @@ There are two things you can do about this warning:
   :ensure t
   :init (global-flycheck-mode))
 
-;; if you want to change prefix for lsp-mode keybindings.
-;(paradox-require 'company-lsp)
-;(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
-;; (require 'company-lsp)
-;; (push 'company-lsp company-backends)
-
-;; "texlab" must be located at a directory contained in `exec-path'.
-;; If you want to put "texlab" somewhere else,
-;; you can specify the path to "texlab" as follows:
-;; (setq lsp-latex-texlab-executable "/path/to/texlab")
-
-;; (with-eval-after-load "tex-mode"
-;;  (add-hook 'tex-mode-hook 'lsp)
-;;  (add-hook 'latex-mode-hook 'lsp))
+;===== Set package auto update settings
 
 (paradox-require 'auto-package-update)
  ; to enable auto update of melpa packages
@@ -128,54 +122,18 @@ There are two things you can do about this warning:
 (setq auto-package-update-delete-old-versions t) ; delete old versions after updating
 (setq auto-package-update-hide-results t) ; hide the update results after the update
 (auto-package-update-maybe)
+;====== Install Pdf-tools
 (pdf-tools-install); pdf-tools install
-
-;; (setq lsp-latex-forward-search-executable "emacsclient")
-;; (setq lsp-latex-forward-search-args
-;;       '("--eval"
-;;         "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
-;; (setq tex-command "platex --synctex=1")
-;(require 'auctex-latexmk)
-;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
-					;(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
-;; (defun flymake-get-tex-args (file-name)
-;; (list "pdflatex"
-;; (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
-
+;====== Setting Comapany mode
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'pdf-view-mode-hook ( lambda() (company-mode -1)))
 ;(paradox-require 'lsp-latex)
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
-
 	  (lambda()
-					;	    (company-auctex-init); start company latex
-
 	    (turn-on-reftex) ;enable reftex
 	    (turn-on-cdlatex)
-	    
 	    (set (make-local-variable 'company-backends) '((separate: company-reftex-labels company-reftex-citations) (separate: company-auctex-symbols company-auctex-environments company-capf company-auctex-macros) company-math-symbols-latex
 	    company-latex-commands ))
-	    ;; (set (make-local-variable 'company-backends) '(( company-reftex-labels
-	    ;; company-reftex-citations)));
-	    (print-elements-of-list company-backends)
-;	    (latex-company)
-	    ;(company-mode)
-	    	   ;;  (set (make-local-variable 'company-backends) '((company-math-symbols-latex
-	    ;; company-latex-commands company-reftex-labels
-	    ;; company-reftex-citations company-auctex-macros
-	    ;; company-auctex-symbols company-auctex-environments)))
-
-	   ;;  (eval-after-load "company"
-  ;; '(add-to-list
-  ;;   'company-backends
-  ;;   'company-latex-commands 'company-reftex-labels
-  ;; 	    'company-reftex-citations 'company-auctex-macros
-  ;; 	    'company-auctex-symbols 'company-auctex-environments))
-
-
-;	    (lsp)
-;	    (lsp-latex)
-	    ;(flymake-mode); flymake mode
 	    (rainbow-delimiters-mode)
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
 	    (setq TeX-parse-self t) ; enable autoparsing
@@ -212,13 +170,7 @@ There are two things you can do about this warning:
 	    (turn-on-auto-fill)
 	    (visual-line-mode)
 	    (LaTeX-math-mode)
-					; autofill enable for line breaks
-	    ;; (setq-local company-backends
-            ;;   (append '((company-math-symbols-latex company-latex-commands))
-            ;;           company-backends))
 	    )
-
-
 	  )
 
 
