@@ -1,3 +1,4 @@
+;;;
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -23,8 +24,9 @@ There are two things you can do about this warning:
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 					;(package-initialize)
-;; (load "server")
-;; (unless (server-running-p) (server-start))
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 					;make sure the following packages are installed
 					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
 					; after installing pdf-tools from MELPA run M-x install pdf-tools
@@ -35,7 +37,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode company-lsp lsp-mode flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -80,7 +82,7 @@ There are two things you can do about this warning:
 ;; (global-set-key [f8] 'auto-save-buffers-toggle); toggle is f8
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
-					;======= IDO
+(global-set-key (kbd "TAB") 'company-complete-common)				;======= IDO
 (paradox-require 'ido)
 (ido-mode t)
 (global-auto-revert-mode t)
@@ -98,16 +100,15 @@ There are two things you can do about this warning:
 ;;(paradox-require 'latex-pretty-symbols) ;enables lates pretty symbols
 ;(require 'magic-latex-buffer)
 ;(require 'company-auctex) ; this requires company latex for autofilling
-
-(require 'ox-reveal)
+(paradox-require 'ox-reveal)
 					;(require 'flymake)
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
 
 ;; if you want to change prefix for lsp-mode keybindings.
-(paradox-require 'company-lsp)
-(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
+;(paradox-require 'company-lsp)
+;(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
 ;; (require 'company-lsp)
 ;; (push 'company-lsp company-backends)
 
@@ -128,19 +129,53 @@ There are two things you can do about this warning:
 (setq auto-package-update-hide-results t) ; hide the update results after the update
 (auto-package-update-maybe)
 (pdf-tools-install); pdf-tools install
+
+;; (setq lsp-latex-forward-search-executable "emacsclient")
+;; (setq lsp-latex-forward-search-args
+;;       '("--eval"
+;;         "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
+;; (setq tex-command "platex --synctex=1")
 ;(require 'auctex-latexmk)
 ;(add-hook 'TeX-mode-hook 'magic-latex-buffer)
-;(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
+					;(add-to-list 'auto-mode-alist '("\\.tex$" .LaTeX-mode)) ;open all .tex files in LaTeX-mode
 ;; (defun flymake-get-tex-args (file-name)
 ;; (list "pdflatex"
 ;; (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
 
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'pdf-view-mode-hook ( lambda() (company-mode -1)))
+;(paradox-require 'lsp-latex)
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 
 	  (lambda()
-	    ;(company-auctex-init); start company latex
+					;	    (company-auctex-init); start company latex
+
 	    (turn-on-reftex) ;enable reftex
 	    (turn-on-cdlatex)
+	    
+	    (set (make-local-variable 'company-backends) '((company-reftex-labels
+	    company-reftex-citations) company-math-symbols-latex
+	    company-latex-commands ))
+	    ;; (set (make-local-variable 'company-backends) '(( company-reftex-labels
+	    ;; company-reftex-citations)));
+	    (print-elements-of-list company-backends)
+;	    (latex-company)
+	    ;(company-mode)
+	    	   ;;  (set (make-local-variable 'company-backends) '((company-math-symbols-latex
+	    ;; company-latex-commands company-reftex-labels
+	    ;; company-reftex-citations company-auctex-macros
+	    ;; company-auctex-symbols company-auctex-environments)))
+
+	   ;;  (eval-after-load "company"
+  ;; '(add-to-list
+  ;;   'company-backends
+  ;;   'company-latex-commands 'company-reftex-labels
+  ;; 	    'company-reftex-citations 'company-auctex-macros
+  ;; 	    'company-auctex-symbols 'company-auctex-environments))
+
+
+;	    (lsp)
+;	    (lsp-latex)
 	    ;(flymake-mode); flymake mode
 	    (rainbow-delimiters-mode)
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
@@ -175,7 +210,10 @@ There are two things you can do about this warning:
 	    (setq ispell-dictionary "english") 
 	    (flyspell-mode) ; flyspell mode enable
 	    (flyspell-buffer); flyspell buffer
-	    (turn-on-auto-fill) ; autofill enable for line breaks
+	    (turn-on-auto-fill)
+	    (visual-line-mode)
+	    (LaTeX-math-mode)
+					; autofill enable for line breaks
 	    ;; (setq-local company-backends
             ;;   (append '((company-math-symbols-latex company-latex-commands))
             ;;           company-backends))
@@ -209,7 +247,7 @@ There are two things you can do about this warning:
 
 ;; prevent demoting heading also shifting text inside sections
 (setq org-adapt-indentation nil)
-
+(setq lsp-print-performance t)
 ;; ORG mode settings start from here
 
 
