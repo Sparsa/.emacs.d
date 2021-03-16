@@ -153,8 +153,7 @@ There are two things you can do about this warning:
 	    (turn-on-reftex) ;enable reftex
 	    (turn-on-cdlatex)
 	    
-	    (set (make-local-variable 'company-backends) '((company-reftex-labels
-	    company-reftex-citations) company-math-symbols-latex
+	    (set (make-local-variable 'company-backends) '((separate: company-reftex-labels company-reftex-citations) (separate: company-auctex-symbols company-auctex-environments company-capf company-auctex-macros) company-math-symbols-latex
 	    company-latex-commands ))
 	    ;; (set (make-local-variable 'company-backends) '(( company-reftex-labels
 	    ;; company-reftex-citations)));
