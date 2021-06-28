@@ -39,7 +39,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -75,7 +75,7 @@ There are two things you can do about this warning:
     (package-refresh-contents)
     (package-install p)))
 
-
+;;(good-scroll-mode 1)
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
 ;====== Comapany Settings
@@ -90,8 +90,8 @@ There are two things you can do about this warning:
 ;===== Stop  cursor blinking
 (blink-cursor-mode -1) ;this will stop the cursor from blinking
 					;===== Doom-modeline
-(require 'flycheck-grammarly)
-
+					;(require 'flycheck-grammarly)
+;(setq flycheck-grammarly-check-time 0.8)
 (mood-line-mode)
 (setq mode-line-minor-modes t)
 (minions-mode 1)
@@ -131,7 +131,7 @@ There are two things you can do about this warning:
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 	  (lambda()
 	    (turn-on-reftex) ;enable reftex
-	    (turn-on-cdlatex)
+	   ; (turn-on-cdlatex) ; I am not using cdlatex mauch.
 	    (set (make-local-variable 'company-backends) '((separate: company-reftex-labels company-reftex-citations) (separate: company-auctex-symbols company-auctex-environments company-capf company-auctex-macros) company-math-symbols-latex
 	    company-latex-commands ))
 	    (rainbow-delimiters-mode)
