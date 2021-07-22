@@ -109,9 +109,9 @@ There are two things you can do about this warning:
 ;(require 'company-auctex) ; this requires company latex for autofilling
 (paradox-require 'ox-reveal)
 					;(require 'flymake)
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
 
 ;===== Set package auto update settings
 
