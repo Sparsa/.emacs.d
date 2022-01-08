@@ -38,6 +38,7 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(flycheck-checker-error-threshold 1000)
  '(package-selected-packages
    '(good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
@@ -67,8 +68,15 @@ There are two things you can do about this warning:
        (while list
          (print (car list))
          (setq list (cdr list))))
-     
 ;;(print-elements-of-list package-selected-packages)
+(define-advice define-obsolete-function-alias (:filter-args (ll) fix-obsolete)
+  (let ((obsolete-name (pop ll))
+        (current-name (pop ll))
+        (when (if ll (pop ll) "1"))
+        (docstring (if ll (pop ll) nil)))
+    (list obsolete-name current-name when docstring)))
+
+;; define obsolete function aliases 
 
 (dolist (p package-selected-packages)
   (when (not (package-installed-p p))
