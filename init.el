@@ -40,7 +40,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(flycheck-checker-error-threshold 1000)
  '(package-selected-packages
-   '(good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
+   '(markdown-preview-mode julia-snail vterm jupyter julia-mode async good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
  '(pdf-cs-reverse-scrolling nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -117,9 +117,9 @@ There are two things you can do about this warning:
 ;(require 'company-auctex) ; this requires company latex for autofilling
 (paradox-require 'ox-reveal)
 					;(require 'flymake)
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
 
 ;===== Set package auto update settings
 
@@ -224,7 +224,16 @@ There are two things you can do about this warning:
           (lambda () (setq indent-tabs-mode nil)))
 (setq rust-format-on-save t)
 (define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
+;;;;;; julia mode hoook
+(paradox-require 'julia-mode)
+(paradox-require 'jupyter)
+(use-package vterm
+  :ensure t)
 
+(use-package julia-snail
+  :ensure t
+  :requires vterm
+  :hook (julia-mode . julia-snail-mode))
 ;; Paradox
 (paradox-require 'paradox)
 (paradox-enable)
