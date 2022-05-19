@@ -40,8 +40,9 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(flycheck-checker-error-threshold 1000)
  '(package-selected-packages
-   '(markdown-preview-mode julia-snail vterm jupyter julia-mode async good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox pdf-continuous-scroll-mode graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols pdf-tools))
- '(pdf-cs-reverse-scrolling nil))
+   '(image-roll markdown-preview-mode julia-snail vterm jupyter julia-mode async good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols))
+ '(pdf-cs-reverse-scrolling nil)
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -59,7 +60,7 @@ There are two things you can do about this warning:
       (quelpa-self-upgrade)))
 
 (require 'quelpa)
-(quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
+;; (quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
 (setq quelpa-upgrade-interval 7)
 
 
@@ -84,6 +85,8 @@ There are two things you can do about this warning:
     (package-install p)))
 
 ;;(good-scroll-mode 1)
+(setq pixel-scroll-precision-mode t)
+(setq pixel-scroll-precision-mode t)
 					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
 ;====== Comapany Settings
@@ -130,8 +133,22 @@ There are two things you can do about this warning:
 (setq auto-package-update-delete-old-versions t) ; delete old versions after updating
 (setq auto-package-update-hide-results t) ; hide the update results after the update
 (auto-package-update-maybe)
-;====== Install Pdf-tools
-(pdf-tools-install); pdf-tools install
+					;====== Install Pdf-tools
+(quelpa
+ '(pdf-tools 
+                      :fetcher github
+                      :repo "dalanicolai/pdf-tools"
+                      :branch "pdf-roll"
+                      :files ("lisp/*.el"
+                              "README"
+                              ("build" "Makefile")
+                              ("build" "server")
+                              (:exclude "lisp/tablist.el" "lisp/tablist-filter.el"))) :upgrade t)
+(quelpa
+ '(image-roll 
+                       :fetcher github
+                       :repo "dalanicolai/image-roll.el") :upgrade t)
+;;(pdf-tools-install); pdf-tools install
 ;====== Setting Comapany mode
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'pdf-view-mode-hook ( lambda() (company-mode -1)))
@@ -183,16 +200,23 @@ There are two things you can do about this warning:
 
 
 
-
-
+(require 'pdf-continuous-scroll-mode)
+(setq pdf-continuous-suppress-introduction 9)
+;;(use-package! pdf-continuous-scroll-mode)
+;; (map! :map pdf-view-mode-map ""#'pdf-continuous-scroll-forward)
+;; (map! :map pdf-view-mode-map ""#'pdf-continuous-scroll-backward)
+(setq book-page-vertical-margin 0)
+(setq pdf-view-image-relief 1)
 ;;
 (global-linum-mode t)
 (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
 ;; TESTING THE CONTINUOUS-SCROLL-MODE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (with-eval-after-load 'pdf-view
+;;   (paradox-require 'pdf-continuous-scroll-mode))
+;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(with-eval-after-load 'pdf-view
-  (paradox-require 'pdf-continuous-scroll-mode))
-(add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
 ;;(setq  pdf-cs-reverse-scrolling t)
 ;(setq TeX-PDF-mode t)
 ;;
