@@ -4,9 +4,14 @@ in order to use it, just clone this repo to your home directory which
 will create a .emacs.d directory and it contains two files, this
 README.md and init.el
 ## Package Requirements
-This configuration requires some packages, and all of them should be
+This configuration now uses Emacs application frame work services.
+Please install Emacs application framework as instructed in the
+repository:
+https://github.com/emacs-eaf/emacs-application-framework
+
+This configuration requires some additional melpa packages, and all of them should be
 installed automatically when the emacs is started with this
-configurations, here I list some of the key packages this
+configuration, here I list some of the key packages this
 configuration uses.
 ### Auctex
 	The most important package in the latex editing mode. It detects
@@ -16,14 +21,6 @@ configuration uses.
 	in another buffer
 	C-c C-c will only compile/ if compiled it will display
 	C-c ` will show the errors during compilation
-### Pdf-view 
-	This package is responsible for the pdf-viewer inside emacs, you
-	can easily open any pdf document in emacs and read
-	in this mode press 's' then 'b' to strip margins of a pdf while
-	viewing
-### Pdf-view continuous 
-
-Now enjoy continuous pdf scrolling experience on Pdf-tools (pdf-view) thanks to https://github.com/dalanicolai/pdf-continuous-scroll-mode.el. 
 
 ### Synctex
 
