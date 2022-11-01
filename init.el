@@ -29,10 +29,24 @@ There are two things you can do about this warning:
 (require 'server)
 (unless (server-running-p)
   (server-start))
-					;make sure the following packages are installed
-					; 1. The auctex, magic-latex-buffer, aspell-en, pdf-tools,
-					; after installing pdf-tools from MELPA run M-x install pdf-tools
-					; this will compile and install the package. But I think every thing is inside the directory.
+;Emacs application framework configurations
+(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+(require 'eaf)
+(require 'eaf-file-manager)
+(require 'eaf-mindmap)
+(require 'eaf-git)
+(require 'eaf-vue-demo)
+(require 'eaf-pdf-viewer)
+(require 'eaf-org-previewer)
+(require 'eaf-browser)
+(require 'eaf-demo)
+(require 'eaf-terminal)
+(require 'eaf-image-viewer)
+(require 'eaf-markdown-previewer)
+(require 'eaf-jupyter)
+(require 'eaf-system-monitor)
+;;End of emacs application framework config
+;; adding custom list of applications I use for daily basis.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -40,7 +54,8 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(flycheck-checker-error-threshold 1000)
  '(package-selected-packages
-   '(image-roll markdown-preview-mode julia-snail vterm jupyter julia-mode async good-scroll flycheck-grammarly minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols))
+   '( markdown-preview-mode julia-snail vterm jupyter julia-mode async good-scroll minions mood-line doom-modeline company-reftex quelpa htmlize ox-reveal cdlatex paradox graphviz-dot-mode rust-mode lsp-mode lsp-latex flycheck bison-mode magit monokai-theme grandshell-theme rainbow-delimiters company-math markdown-mode multi-term auto-package-update nimbus-theme company-auctex use-package diff-hl yasnippet ac-math auto-complete magic-latex-buffer latex-pretty-symbols))
+ '(paradox-github-token t)
  '(pdf-cs-reverse-scrolling nil)
  '(warning-suppress-types '((comp))))
 (custom-set-faces
@@ -49,45 +64,23 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-;;; Code:
-
-					;======Autoinstall Packages If Not Installed=======
-;;install quelpa
-(unless (package-installed-p 'quelpa)
-    (with-temp-buffer
-      (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-      (eval-buffer)
-      (quelpa-self-upgrade)))
-
-(require 'quelpa)
-;; (quelpa '(pdf-continuous-scroll-mode :fetcher git :url "https://github.com/dalanicolai/pdf-continuous-scroll-mode.el"))
-(setq quelpa-upgrade-interval 7)
-
-
 (defun print-elements-of-list (list)
        "Print each element of LIST on a line of its own."
        (while list
          (print (car list))
          (setq list (cdr list))))
-;;(print-elements-of-list package-selected-packages)
 (define-advice define-obsolete-function-alias (:filter-args (ll) fix-obsolete)
   (let ((obsolete-name (pop ll))
         (current-name (pop ll))
         (when (if ll (pop ll) "1"))
         (docstring (if ll (pop ll) nil)))
     (list obsolete-name current-name when docstring)))
-
-;; define obsolete function aliases 
-
 (dolist (p package-selected-packages)
   (when (not (package-installed-p p))
     (package-refresh-contents)
     (package-install p)))
 
-;;(good-scroll-mode 1)
 (setq pixel-scroll-precision-mode t)
-(setq pixel-scroll-precision-mode t)
-					;===== Magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
 ;====== Comapany Settings
 (global-set-key (kbd "TAB") 'company-complete-common)
@@ -106,18 +99,14 @@ There are two things you can do about this warning:
 (mood-line-mode)
 (setq mode-line-minor-modes t)
 (minions-mode 1)
-;; The limit of the window width.
-;; If `window-width' is smaller than the limit, some information won't be displayed.
-;(setq doom-modeline-window-width-limit fill-column)
-;===== enable global diff mode, wrt 
+
+
 (global-diff-hl-mode); enable diff highlight for current changes
 (set-frame-font "Monaco 12") ;this will set the default font to monaco and size 12
 (load-theme 'monokai t);'grandshell t) ;enables grandshell theme
 (load "auctex.el" nil t t); it loads auctex 
 (load "preview-latex.el" nil t t) ; it enables latex preview
-;;(paradox-require 'latex-pretty-symbols) ;enables lates pretty symbols
-;(require 'magic-latex-buffer)
-;(require 'company-auctex) ; this requires company latex for autofilling
+
 (paradox-require 'ox-reveal)
 					;(require 'flymake)
 ;; (use-package flycheck
@@ -133,26 +122,12 @@ There are two things you can do about this warning:
 (setq auto-package-update-delete-old-versions t) ; delete old versions after updating
 (setq auto-package-update-hide-results t) ; hide the update results after the update
 (auto-package-update-maybe)
-					;====== Install Pdf-tools
-(quelpa
- '(pdf-tools 
-                      :fetcher github
-                      :repo "dalanicolai/pdf-tools"
-                      :branch "pdf-roll"
-                      :files ("lisp/*.el"
-                              "README"
-                              ("build" "Makefile")
-                              ("build" "server")
-                              (:exclude "lisp/tablist.el" "lisp/tablist-filter.el"))) :upgrade t)
-(quelpa
- '(image-roll 
-                       :fetcher github
-                       :repo "dalanicolai/image-roll.el") :upgrade t)
-;;(pdf-tools-install); pdf-tools install
-;====== Setting Comapany mode
+
+
 (add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'pdf-view-mode-hook ( lambda() (company-mode -1)))
-;(paradox-require 'lsp-latex)
+
+
+(require 'latex)					;(add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))
 (add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
 	  (lambda()
 	    (turn-on-reftex) ;enable reftex
@@ -163,8 +138,11 @@ There are two things you can do about this warning:
 	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
 	    (setq TeX-parse-self t) ; enable autoparsing
 	    (setq TeX-save-query nil) ; 
-	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-		  TeX-source-correlate-start-server t) ;use pdf-tools for default document view
+	    (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))
+	    (add-to-list 'TeX-view-program-list '("eaf" eaf-pdf-synctex-forward-view))
+	    (add-to-list 'TeX-view-program-selection '(output-pdf "eaf"))
+	    ;; 	  TeX-source-correlate-start-server t)
+					;use pdf-tools for default document view
 	    (setq predictive-latex-electric-environments 1)
 	    ;; (add-to-list 'LaTeX-indent-environment-list "tikzpicture")
 	    ;; (print-elemenets-of-list LaTeX-indent-environment-list)
@@ -198,30 +176,8 @@ There are two things you can do about this warning:
 	    )
 	  )
 
-
-
-(require 'pdf-continuous-scroll-mode)
-(setq pdf-continuous-suppress-introduction 9)
-;;(use-package! pdf-continuous-scroll-mode)
-;; (map! :map pdf-view-mode-map ""#'pdf-continuous-scroll-forward)
-;; (map! :map pdf-view-mode-map ""#'pdf-continuous-scroll-backward)
-(setq book-page-vertical-margin 0)
-(setq pdf-view-image-relief 1)
-;;
-(global-linum-mode t)
-(add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1))); disable linum-mode if enabled in pdf-view mode.
-;; TESTING THE CONTINUOUS-SCROLL-MODE
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (with-eval-after-load 'pdf-view
-;;   (paradox-require 'pdf-continuous-scroll-mode))
-;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;(setq  pdf-cs-reverse-scrolling t)
-;(setq TeX-PDF-mode t)
-;;
-
-;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+;(add-to-list 'TeX-view-program-list '("eaf" eaf-pdf-synctex-forward-view))
+;(add-to-list 'TeX-view-program-selection '(output-pdf "eaf"))
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -237,7 +193,7 @@ There are two things you can do about this warning:
 
 (add-hook 'org-mode-hook
 	  (global-set-key (kbd "C-c l") 'org-store-link)
-	  (global-set-key (kbd "C-c a") 'org-agenda)
+	  (global-set-key (kbd "C-c a") 'org-agenda) 
 	  (global-set-key (kbd "C-c c") 'org-capture)
 	  
 	  )
@@ -261,3 +217,4 @@ There are two things you can do about this warning:
 ;; Paradox
 (paradox-require 'paradox)
 (paradox-enable)
+
